@@ -1,3 +1,127 @@
-div {
-  color: red;
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: linear-gradient(to right, #8e8e8e, #bec1c2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  overflow: auto;
+}
+
+.header {
+  text-align: center;
+  font-size: 40px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to right, #e6e6e6, #b9d3ee);
+  margin: 20px 0px 20px 0px;
+  padding: 30px;
+  border-radius: 5px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  gap: 30px;
+  width: 100%;
+  max-width: 800px;
+  margin: 10px;
+}
+
+.encrypted,
+.decrypted {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.inputs label {
+  font-weight: bold;
+}
+
+#key-text, #filtered-key-text {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  resize: none;
+  height: 30px;
+  width: 500px;
+}
+
+#matrix-with-key {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  resize: none;
+  height: 100px;
+  width: auto;
+}
+
+.key-text {
+  height: 50px;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; 
+  gap: 20px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.control-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.control-group input {
+  align-items: center;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.encrypt-button, .decrypt-button, .playfair-button {
+  background: #4a148c;
+  color: white;
+  padding: 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  align-self: flex-start;
+}
+
+
+.encrypt-button:hover, .decrypt-button:hover,.playfair-button:hover {
+  background: #ab44ec;
+}
+
+.encrypt-button:active, .decrypt-button:active, .playfair-button:active {
+  background: #7d03f0;
+}
+
+.encrypt-button, .decrypt-button {
+  transition: background 0.3s;
 }
