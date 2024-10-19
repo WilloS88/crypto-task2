@@ -26,7 +26,7 @@ function prepareInput(key) {
 // Function to format the matrix without special characters
 function formatMatrix(matrix) {
     return matrix
-        .map((row) => row.join("     "))
+        .map((row) => row.join("        "))
         .join("\n")
         .toUpperCase();
 }
@@ -81,7 +81,7 @@ function displayKeyMatrix(key) {
     const keyText = prepareInput(document.getElementById("key-text").value);
     try {
         const encodedText = displayKeyMatrix(keyText);
-        document.getElementById("encrypted-matrix").value =
+        document.getElementById("matrix-with-key").value =
             formatMatrix(encodedText);
     }
     catch (error) {
@@ -99,7 +99,7 @@ function displayKeyMatrix(key) {
         playfairKeyEx.toUpperCase();
     try {
         const encodedText = displayKeyMatrix(playfairKeyEx);
-        document.getElementById("encrypted-matrix").value =
+        document.getElementById("matrix-with-key").value =
             formatMatrix(encodedText);
     }
     catch (error) {

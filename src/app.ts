@@ -26,7 +26,7 @@ function prepareInput(key: string): string {
 // Function to format the matrix without special characters
 function formatMatrix(matrix: string[][]): string {
   return matrix
-    .map((row) => row.join("     "))
+    .map((row) => row.join("        "))
     .join("\n")
     .toUpperCase();
 }
@@ -93,7 +93,7 @@ document.querySelector(".encrypt-button")?.addEventListener("click", () => {
 
   try {
     const encodedText = displayKeyMatrix(keyText);
-    (document.getElementById("encrypted-matrix") as HTMLTextAreaElement).value =
+    (document.getElementById("matrix-with-key") as HTMLTextAreaElement).value =
       formatMatrix(encodedText);
   } catch (error) {
     if (error instanceof Error) {
@@ -111,7 +111,7 @@ document.querySelector(".playfair-button")?.addEventListener("click", () => {
 
   try {
     const encodedText = displayKeyMatrix(playfairKeyEx);
-    (document.getElementById("encrypted-matrix") as HTMLTextAreaElement).value =
+    (document.getElementById("matrix-with-key") as HTMLTextAreaElement).value =
       formatMatrix(encodedText);
   } catch (error) {
     if (error instanceof Error) {
