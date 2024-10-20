@@ -26,30 +26,27 @@ function prepareInput(key) {
 }
 // Function to split text into chunks of two characters
 function prepareText(text) {
-    // First, filter the input to remove any unwanted characters
     let preparedText = prepareInput(text);
     let result = "";
-    // Loop through the string in pairs of two
-    for (let i = 0; i < preparedText.length; i += 2) {
+    let i = 0;
+    while (i < preparedText.length) {
         let char1 = preparedText[i];
         let char2 = preparedText[i + 1];
-        // If the second character is undefined (odd length), add X at the end
+        // If the second character is undefined (odd length), add 'X' to make a pair
         if (!char2) {
             result += char1 + "X";
+            i += 2;
         }
-        // If both characters are the same, insert 'X' between them
+        // If both characters are the same, insert 'X' after the first and reprocess the second character
         else if (char1 === char2) {
-            result += char1 + "X " + char2;
+            result += char1 + "X ";
+            i += 1; // Move only one step to reprocess char2 in the next iteration
         }
         // Otherwise, add the pair as is
         else {
             result += char1 + char2 + " ";
+            i += 2;
         }
-    }
-    // Check if the resulting text length (ignoring spaces) is odd, and append 'X' if necessary
-    const cleanResult = result.replace(/\s+/g, ''); // Remove spaces to check the actual length
-    if (cleanResult.length % 2 !== 0) {
-        result += "X";
     }
     return result.trim(); // Remove any trailing space
 }

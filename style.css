@@ -56,7 +56,6 @@ button:active {
 .layout {
   margin-top: 5px;
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
 }
@@ -161,6 +160,7 @@ button:active {
 .encrypt-button,
 .decrypt-button,
 .playfair-button {
+  font-weight: bold;
   padding: 20px;
   border: none;
   border-radius: 5px;
@@ -168,17 +168,3 @@ button:active {
   font-size: 16px;
   align-self: flex-start;
 }
-
-/* .encrypt-button:hover,
-.decrypt-button:hover,
-.playfair-button:hover {
-}
-
-.encrypt-button:active,
-.decrypt-button:active,
-.playfair-button:active {
-}
-
-.encrypt-button,
-.decrypt-button {
-} */
