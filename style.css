@@ -5,7 +5,13 @@
 }
 
 body {
-  background: linear-gradient(to right, #8e8e8e, #bec1c2);
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    90deg,
+    rgb(84, 84, 84) 0%,
+    rgb(88, 88, 101) 51%,
+    rgba(182, 182, 182, 1) 100%
+  );
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -15,17 +21,56 @@ body {
   overflow: auto;
 }
 
+button {
+  cursor: pointer;
+  background: #3e3b41;
+  color: white;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #716f72;
+}
+
+button:active {
+  background: #373638;
+}
+
 .header {
+  background-color: whitesmoke;
+  display: flex;
   text-align: center;
   font-size: 40px;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-weight: bold;
+  align-items: center;
+  gap: 10px;
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.header img {
+  width: 50px;
+}
+
+.layout {
+  margin-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.layout img {
+  width: 200px;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .box {
   display: flex;
   flex-direction: column;
-  background: linear-gradient(to right, #e6e6e6, #b9d3ee);
+  background-color: #e6e6e6;
   margin: 20px 0px 20px 0px;
   padding: 30px;
   border-radius: 5px;
@@ -44,6 +89,14 @@ body {
   gap: 20px;
 }
 
+#toggle-language-btn {
+  color: #3e3b41;
+  padding: 10px;
+  width: 80px;
+  font-size: 16px;
+  align-self: flex-start;
+}
+
 .inputs {
   display: flex;
   flex-direction: column;
@@ -54,14 +107,17 @@ body {
   font-weight: bold;
 }
 
-#key-text, #filtered-key-text {
+#key-text,
+#filtered-key-text,
+#text-to-encrypt,
+#filtered-text-to-encrypt {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
   font-size: 14px;
   resize: none;
   height: 30px;
-  width: 500px;
+  width: 300px;
 }
 
 #matrix-with-key {
@@ -81,7 +137,7 @@ body {
 .controls {
   display: flex;
   align-items: center;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
   gap: 20px;
 }
 
@@ -102,9 +158,9 @@ body {
   border: 1px solid #ccc;
 }
 
-.encrypt-button, .decrypt-button, .playfair-button {
-  background: #4a148c;
-  color: white;
+.encrypt-button,
+.decrypt-button,
+.playfair-button {
   padding: 20px;
   border: none;
   border-radius: 5px;
@@ -113,15 +169,16 @@ body {
   align-self: flex-start;
 }
 
-
-.encrypt-button:hover, .decrypt-button:hover,.playfair-button:hover {
-  background: #ab44ec;
+/* .encrypt-button:hover,
+.decrypt-button:hover,
+.playfair-button:hover {
 }
 
-.encrypt-button:active, .decrypt-button:active, .playfair-button:active {
-  background: #7d03f0;
+.encrypt-button:active,
+.decrypt-button:active,
+.playfair-button:active {
 }
 
-.encrypt-button, .decrypt-button {
-  transition: background 0.3s;
-}
+.encrypt-button,
+.decrypt-button {
+} */

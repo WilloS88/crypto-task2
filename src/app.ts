@@ -4,8 +4,8 @@ const playfairKeyEx = "PLAYFAIREXAMPLE";
 
 // Filter input
 function prepareInput(key: string): string {
-  return key
-    .toUpperCase() // Convert to uppercase
+  let preparedKey = key
+    .toUpperCase()
     .replace(/[ÁÀÂÄ]/g, "A")
     .replace(/[Č]/g, "C")
     .replace(/[Ď]/g, "D")
@@ -20,8 +20,48 @@ function prepareInput(key: string): string {
     .replace(/[Ý]/g, "Y")
     .replace(/[Ž]/g, "Z")
     .replace(/J/g, "I") // Replace J with I
-    .replace(/[^A-Z0-9 ]/g, ""); // Remove all special characters
+    .replace(/[^A-Z]/g, ""); // Remove everything except alphabet chars
+
+  return preparedKey;
 }
+
+// Function to split text into chunks of two characters
+function prepareText(text: string): string {
+  // First, filter the input to remove any unwanted characters
+  let preparedText = prepareInput(text);
+
+  let result = "";
+  
+  // Loop through the string in pairs of two
+  for (let i = 0; i < preparedText.length; i += 2) {
+    let char1 = preparedText[i];
+    let char2 = preparedText[i + 1];
+
+    // If the second character is undefined (odd length), add X at the end
+    if (!char2) {
+      result += char1 + "X";
+    } 
+    // If both characters are the same, insert 'X' between them
+    else if (char1 === char2) {
+      result += char1 + "X " + char2;
+    } 
+    // Otherwise, add the pair as is
+    else {
+      result += char1 + char2 + " ";
+    }
+  }
+
+  // Check if the resulting text length (ignoring spaces) is odd, and append 'X' if necessary
+  const cleanResult = result.replace(/\s+/g, ''); // Remove spaces to check the actual length
+  if (cleanResult.length % 2 !== 0) {
+    result += "X";
+  }
+
+  return result.trim(); // Remove any trailing space
+}
+
+
+
 
 // Function to format the matrix without special characters
 function formatMatrix(matrix: string[][]): string {
@@ -51,7 +91,7 @@ function displayKeyMatrix(key: string): string[][] {
   let rowIndex = 0;
   let colIndex = 0;
 
-  //
+  // Fill the matrix with the key
   for (const char of key) {
     if (!isCharInMatrix(keyMatrix, char)) {
       keyMatrix[rowIndex][colIndex] = char;
@@ -66,7 +106,7 @@ function displayKeyMatrix(key: string): string[][] {
     }
   }
 
-  //
+  // Fill the remaining matrix with the alphabet
   for (const char of alphabet) {
     if (!isCharInMatrix(keyMatrix, char)) {
       keyMatrix[rowIndex][colIndex] = char;
@@ -87,14 +127,27 @@ function displayKeyMatrix(key: string): string[][] {
 
 // Event Listener for Keys and displaying in UI
 document.querySelector(".encrypt-button")?.addEventListener("click", () => {
+  // Get the key text and text input from the user
   const keyText = prepareInput(
     (document.getElementById("key-text") as HTMLTextAreaElement).value
   );
+  const encryptText = (
+    document.getElementById("text-to-encrypt") as HTMLTextAreaElement
+  ).value;
+
+  // Prepare and filter the text to be encrypted
+  const filteredText = prepareText(encryptText);
+
+  // Display the filtered text
+  (
+    document.getElementById("filtered-text-to-encrypt") as HTMLTextAreaElement
+  ).value = filteredText;
 
   try {
-    const encodedText = displayKeyMatrix(keyText);
+    // Generate the key matrix and display it
+    const matrixWithKey = displayKeyMatrix(keyText);
     (document.getElementById("matrix-with-key") as HTMLTextAreaElement).value =
-      formatMatrix(encodedText);
+      formatMatrix(matrixWithKey);
   } catch (error) {
     if (error instanceof Error) {
       alert(error.message);
