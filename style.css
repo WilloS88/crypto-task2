@@ -106,7 +106,8 @@ button:active {
 #filtered-text-to-encrypt,
 #encrypted-text,
 #text-to-decrypt,
-#decrypted-text {
+#decrypted-text,
+#decrypted-filtered-text {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
