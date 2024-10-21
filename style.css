@@ -68,7 +68,6 @@ button:active {
 
 .box {
   display: flex;
-  flex-direction: column;
   background-color: #e6e6e6;
   margin: 20px 0px 20px 0px;
   padding: 30px;
@@ -78,11 +77,6 @@ button:active {
   width: 100%;
   max-width: 800px;
   margin: 10px;
-}
-
-.encrypted,
-.decrypted {
-  display: flex;
   justify-content: center;
   align-items: center;
   gap: 20px;
@@ -109,7 +103,10 @@ button:active {
 #key-text,
 #filtered-key-text,
 #text-to-encrypt,
-#filtered-text-to-encrypt {
+#filtered-text-to-encrypt,
+#encrypted-text,
+#text-to-decrypt,
+#decrypted-text {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
@@ -133,38 +130,33 @@ button:active {
   height: 50px;
 }
 
-.controls {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.control-group {
+.control-buttons {
   display: flex;
   flex-direction: column;
-}
-
-.control-group label {
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.control-group input {
   align-items: center;
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  justify-content: flex-start;
+  gap: 10px;
 }
 
+#language-button {
+  align-self: flex-start;
+  margin-bottom: 40px;
+  font-weight: bold;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.playfair-button,
 .encrypt-button,
-.decrypt-button,
-.playfair-button {
+.decrypt-button {
   font-weight: bold;
   padding: 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  align-self: flex-start;
 }
+

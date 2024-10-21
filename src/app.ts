@@ -29,7 +29,7 @@ function prepareText(text: string): string {
   let preparedText = prepareInput(text);
   let result = "";
   let i = 0;
-  
+
   while (i < preparedText.length) {
     let char1 = preparedText[i];
     let char2 = preparedText[i + 1];
@@ -51,7 +51,7 @@ function prepareText(text: string): string {
     }
   }
 
-  return result.trim(); // Remove any trailing space
+  return result.trim();
 }
 
 // Function to format the matrix without special characters
@@ -116,6 +116,71 @@ function displayKeyMatrix(key: string): string[][] {
   return keyMatrix;
 }
 
+// Funtion to find the position of a character in the matrix
+function findPosition(matrix: string[][], char: string): [number, number] {
+  for (let row = 0; row < matrixSize; row++) {
+    for (let col = 0; col < matrixSize; col++) {
+      if (matrix[row][col] === char) {
+        return [row, col];
+      }
+    }
+  }
+  throw new Error(`Character ${char} not found in key matrix`);
+}
+
+// Check if the two chars are in the same ROW
+function areCharsInSameRow(
+  matrix: string[][],
+  char1: string,
+  char2: string
+): boolean {
+  const [row1] = findPosition(matrix, char1);
+  const [row2] = findPosition(matrix, char2);
+  return row1 === row2;
+}
+
+// Check if the two chars are in the same COL
+function areCharsInSameColumn(
+  matrix: string[][],
+  char1: string,
+  char2: string
+): boolean {
+  const [, col1] = findPosition(matrix, char1);
+  const [, col2] = findPosition(matrix, char2);
+  return col1 === col2;
+}
+
+function encryptPlayfairCipher(text: string, keyMatrix: string[][]): string {
+  const preparedText = prepareText(text);
+  const pairs = preparedText.split(" ");
+
+  let encryptedText = "";
+
+  for (const pair of pairs) {
+    const char1 = pair[0];
+    const char2 = pair[1];
+
+    let [row1, col1] = findPosition(keyMatrix, char1);
+    let [row2, col2] = findPosition(keyMatrix, char2);
+
+    if (row1 === row2) {
+      // Same row: replace each with the letter to the right, wrapping around
+      col1 = (col1 + 1) % matrixSize;
+      col2 = (col2 + 1) % matrixSize;
+      encryptedText += keyMatrix[row1][col1] + keyMatrix[row2][col2] + " ";
+    } else if (col1 === col2) {
+      // Same column: replace each with the letter below, wrapping around
+      row1 = (row1 + 1) % matrixSize;
+      row2 = (row2 + 1) % matrixSize;
+      encryptedText += keyMatrix[row1][col1] + keyMatrix[row2][col2] + " ";
+    } else {
+      // Rectangle: swap columns "diagonal"
+      encryptedText += keyMatrix[row1][col2] + keyMatrix[row2][col1] + " ";
+    }
+  }
+  return encryptedText.trim();
+}
+
 // Event Listener for Keys and displaying in UI
 document.querySelector(".encrypt-button")?.addEventListener("click", () => {
   // Get the key text and text input from the user
@@ -139,6 +204,11 @@ document.querySelector(".encrypt-button")?.addEventListener("click", () => {
     const matrixWithKey = displayKeyMatrix(keyText);
     (document.getElementById("matrix-with-key") as HTMLTextAreaElement).value =
       formatMatrix(matrixWithKey);
+    // Encrypt the text and display it
+    const encryptedText = encryptPlayfairCipher(filteredText, matrixWithKey);
+    (document.getElementById("encrypted-text") as HTMLTextAreaElement).value = 
+      encryptedText;
+    
   } catch (error) {
     if (error instanceof Error) {
       alert(error.message);
@@ -165,9 +235,3 @@ document.querySelector(".playfair-button")?.addEventListener("click", () => {
     }
   }
 });
-
-// Check if the two chars are in the same ROW
-
-// Check if the two chars are in the same COL
-
-// Check if the two chars are in the same DIAGONAL

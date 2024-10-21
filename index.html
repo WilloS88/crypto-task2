@@ -16,55 +16,53 @@
         <img src="./assets/charles.png" alt="" />
       </div>
       <div class="box">
-        <div class="encrypted">
-          <div class="inputs">
-            <label for="text-to-encrypt">Enter Key</label>
-            <textarea id="key-text" placeholder="Enter Key here..."></textarea>
-            <label for="text-to-encrypt">Text to be encrypted</label>
-            <textarea
+        <div class="inputs">
+          <label for="text-to-encrypt">Enter Key</label>
+          <textarea id="key-text" placeholder="Enter Key here..."></textarea>
+          <label for="text-to-encrypt">Text to be encrypted</label>
+          <textarea
             id="text-to-encrypt"
             placeholder="Type text you want to encypt"
-            ></textarea>
-            <label for="filtered-key-text">Filtered Text</label>
-            <textarea
-              id="filtered-text-to-encrypt"
-              placeholder="Filtered Key will appear here..."
-              readonly
-            ></textarea>
-            <label for="matrix-key">Matrix with Key</label>
-            <textarea
-              id="matrix-with-key"
-              placeholder="Matrix with Key will appear here..."
-              readonly
-            ></textarea>
-            <label for="text-to-encrypt">Encrypted text</label>
-            <textarea
-              id="encryptd-text"
-              placeholder="encryped text will appear here..."
-            ></textarea>
-          </div>
-          <div class="controls">
-            <button class="playfair-button">Playfair Example</button>
-            <button class="encrypt-button">Encrypt</button>
-          </div>
+          ></textarea>
+          <label for="filtered-key-text">Filtered Text</label>
+          <textarea
+            id="filtered-text-to-encrypt"
+            placeholder="Filtered Key will appear here..."
+            readonly
+          ></textarea>
+          <label for="matrix-key">Matrix with Key</label>
+          <textarea
+            id="matrix-with-key"
+            placeholder="Matrix with Key will appear here..."
+            readonly
+          ></textarea>
+          <label for="text-to-encrypt">Encrypted text</label>
+          <textarea
+            id="encrypted-text"
+            placeholder="encryped text will appear here..."
+          ></textarea>
+          <label for="text-to-decrypt">To be decrypted</label>
+          <textarea
+            id="text-to-decrypt"
+            placeholder="Enter some text here..."
+          ></textarea>
+          <label for="decrypted-text">Decrypted text</label>
+          <textarea
+            id="decrypted-text"
+            placeholder="decrypted text will appear here..."
+            readonly
+          ></textarea>
         </div>
-        <div class="decrypted">
-          <div class="inputs">
-            <label for="text-to-decrypt">To be decrypted</label>
-            <textarea
-              id="text-to-decrypt"
-              placeholder="Enter some text here..."
-            ></textarea>
-            <label for="decrypted-text">Decrypted text</label>
-            <textarea
-              id="decrypted-text"
-              placeholder="decrypted text will appear here..."
-              readonly
-            ></textarea>
+        <div class="control-buttons">
+          <div>
+            <button id="language-button">Czech</button>
           </div>
-          <div class="controls">
-            <button class="decrypt-button">decrypt</button>
-          </div>
+          <button class="playfair-button">
+            Playfair <br />
+            Example
+          </button>
+          <button class="encrypt-button">Encrypt</button>
+          <button class="decrypt-button">Decrypt</button>
         </div>
       </div>
       <div class="authors">
