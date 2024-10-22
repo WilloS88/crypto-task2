@@ -1,10 +1,23 @@
 const matrixSize = 5;
 const alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
 const playfairKeyEx = "PLAYFAIREXAMPLE";
+const spacePlaceholder = "XMEZERAY";
+const numbersPlaceholder = [
+  "XZEROY",
+  "XONEY",
+  "XTWOY",
+  "XTHREEY",
+  "XFOURY",
+  "XFIVEY",
+  "XSIXY",
+  "XSEVENY",
+  "XEIGHTY",
+  "XNINEY",
+];
 
 // Filter input
-function prepareInput(key: string): string {
-  let preparedKey = key
+function prepareInput(text: string): string {
+  return text
     .toUpperCase()
     .replace(/[ÁÀÂÄ]/g, "A")
     .replace(/[Č]/g, "C")
@@ -20,8 +33,9 @@ function prepareInput(key: string): string {
     .replace(/[Ý]/g, "Y")
     .replace(/[Ž]/g, "Z")
     .replace(/J/g, "I") // Replace J with I
-    .replace(/[^A-Z]/g, ""); // Remove everything except alphabet chars
-  return preparedKey;
+    .replace(/[^A-Z0-9 ]/g, "") // Remove all special characters except numbers and spaces
+    .replace(/ /g, spacePlaceholder) // Replace spaces with placeholder
+    .replace(/[0-9]/g, (digit: string) => numbersPlaceholder[parseInt(digit)]); // Replace numbers with placeholders
 }
 
 // Function to split text into chunks of two characters a filter them
@@ -35,12 +49,17 @@ function prepareText(text: string, encryption: boolean): string {
       let char1 = preparedText[i];
       let char2 = preparedText[i + 1];
 
-      // If the second character is undefined (odd length), add 'X' to make a pair
+      // If the second character is undefined (odd length)
       if (!char2) {
-        result += char1 + "X";
+        // If the last character is "X", avoid adding "X" to make "XX"
+        let paddingChar = "X";
+        if (char1 === "X") {
+          paddingChar = "Q"; // Use "Q" or any other character that is not "X"
+        }
+        result += char1 + paddingChar;
         i += 2;
       }
-      // If both characters are the same, insert 'X' after the first and reprocess the second character
+      // If both characters are the same, insert "X" after the first and reprocess the second character
       else if (char1 === char2) {
         result += char1 + "X ";
         i += 1; // Move only one step to reprocess char2 in the next iteration
@@ -53,10 +72,12 @@ function prepareText(text: string, encryption: boolean): string {
     }
   }
   if (!encryption) {
+    // Split the text into pairs
     let pairs = preparedText.match(/.{1,2}/g);
     if (!pairs) {
       throw new Error("Invalid decrypted text");
     }
+
     for (let i = 0; i < pairs.length; i++) {
       let pair = pairs[i];
       let char1 = pair[0];
@@ -72,21 +93,26 @@ function prepareText(text: string, encryption: boolean): string {
             // "X" might be a valid character, include it
             result += char1 + char2;
           }
+        } else if (char2 === "Q") {
+          // "Q" was added as padding, check if it should be removed
+          if (i === pairs.length - 1) {
+            // It's the last pair, remove "Q"
+            result += char1;
+          } else {
+            result += char1 + char2;
+          }
         } else {
           result += char1 + char2;
         }
       } else {
         // Only one character left
-        if (char1 !== "X") {
+        if (char1 !== "X" && char1 !== "Q") {
           result += char1;
         }
       }
     }
-    // Remove any trailing 'X' that was added as padding during encryption
-    if (result[result.length - 1] === "X") {
-      result = result.slice(0, -1);
-    }
   }
+
   return result.trim();
 }
 
@@ -186,11 +212,7 @@ function areCharsInSameColumn(
   return col1 === col2;
 }
 
-function encryptDecryptPlayfairCipher(
-  text: string,
-  keyMatrix: string[][],
-  encryptDecrypt: boolean
-): string {
+function encryptPlayfairCipher(text: string, keyMatrix: string[][]): string {
   const preparedText = prepareText(text, true);
   const pairs = preparedText.split(" ");
 
@@ -203,42 +225,78 @@ function encryptDecryptPlayfairCipher(
     let [row1, col1] = findPosition(keyMatrix, char1);
     let [row2, col2] = findPosition(keyMatrix, char2);
 
-    // Based on the bool value we decide to ENCRYPT
-    if (encryptDecrypt) {
-      if (row1 === row2) {
-        // Same row: replace each with the letter to the RIGHT, wrapping around
-        col1 = (col1 + 1) % matrixSize;
-        col2 = (col2 + 1) % matrixSize;
-        encryptedText += keyMatrix[row1][col1] + keyMatrix[row2][col2] + " ";
-      } else if (col1 === col2) {
-        // Same column: replace each with the letter BELOW, wrapping around
-        row1 = (row1 + 1) % matrixSize;
-        row2 = (row2 + 1) % matrixSize;
-        encryptedText += keyMatrix[row1][col1] + keyMatrix[row2][col2] + " ";
-      } else {
-        // Rectangle: swap columns "DIAGONAL"
-        encryptedText += keyMatrix[row1][col2] + keyMatrix[row2][col1] + " ";
-      }
-    }
-    // Based on the bool value we decide to DECRYPT
-    if (!encryptDecrypt) {
-      if (row1 === row2) {
-        // Same row: replace each with the letter to the LEFT, wrapping around
-        col1 = (col1 - 1) % matrixSize;
-        col2 = (col2 - 1) % matrixSize;
-        encryptedText += keyMatrix[row1][col1] + keyMatrix[row2][col2] + " ";
-      } else if (col1 === col2) {
-        // Same column: replace each with the letter ABOVE, wrapping around
-        row1 = (row1 - 1) % matrixSize;
-        row2 = (row2 - 1) % matrixSize;
-        encryptedText += keyMatrix[row1][col1] + keyMatrix[row2][col2] + " ";
-      } else {
-        // Rectangle: swap columns "DIAGONAL"
-        encryptedText += keyMatrix[row1][col2] + keyMatrix[row2][col1] + " ";
-      }
+    if (row1 === row2) {
+      // Same row: replace each with the letter to the RIGHT, wrapping around
+      col1 = (col1 + 1) % matrixSize;
+      col2 = (col2 + 1) % matrixSize;
+      encryptedText += keyMatrix[row1][col1] + keyMatrix[row2][col2] + " ";
+    } else if (col1 === col2) {
+      // Same column: replace each with the letter BELOW, wrapping around
+      row1 = (row1 + 1) % matrixSize;
+      row2 = (row2 + 1) % matrixSize;
+      encryptedText += keyMatrix[row1][col1] + keyMatrix[row2][col2] + " ";
+    } else {
+      // Rectangle: swap columns "DIAGONAL"
+      encryptedText += keyMatrix[row1][col2] + keyMatrix[row2][col1] + " ";
     }
   }
+
   return encryptedText.trim();
+}
+
+function decryptPlayfairCipher(
+  text: string,
+  keyMatrix: string[][],
+  originalInput: string
+): string {
+  // Remove spaces and prepare the text for decryption
+  const preparedText = prepareText(text.replace(/\s+/g, ""), false);
+  const pairs = preparedText.match(/.{1,2}/g);
+
+  if (!pairs) {
+    throw new Error("Invalid encrypted text");
+  }
+
+  let decryptedText = pairs
+  .map((pair) => {
+    const char1 = pair[0];
+    const char2 = pair[1];
+
+    let [row1, col1] = findPosition(keyMatrix, char1);
+    let [row2, col2] = findPosition(keyMatrix, char2);
+
+    if (row1 === row2) {
+      // Same row: replace each with the letter to the LEFT, wrapping around
+      col1 = (col1 - 1 + matrixSize) % matrixSize;
+      col2 = (col2 - 1 + matrixSize) % matrixSize;
+      return keyMatrix[row1][col1] + keyMatrix[row2][col2];
+    } else if (col1 === col2) {
+      // Same column: replace each with the letter ABOVE, wrapping around
+      row1 = (row1 - 1 + matrixSize) % matrixSize;
+      row2 = (row2 - 1 + matrixSize) % matrixSize;
+      return keyMatrix[row1][col1] + keyMatrix[row2][col2];
+    } else {
+      // Rectangle: swap columns "DIAGONAL"
+      return keyMatrix[row1][col2] + keyMatrix[row2][col1];
+    }
+  })
+  .join(""); // Into a single string
+
+
+  // Replace placeholders back to original spaces and numbers
+  decryptedText = decryptedText
+    .replace(new RegExp(spacePlaceholder, "g"), " ")
+    .replace(new RegExp(numbersPlaceholder.join("|"), "g"), (match) => {
+      const index = numbersPlaceholder.indexOf(match);
+      return index !== -1 ? index.toString() : match;
+    });
+
+  // Compare decryptedText with the original input to remove padding characters
+  if (decryptedText.length > originalInput.length) {
+    decryptedText = decryptedText.slice(0, originalInput.length);
+  }
+
+  return decryptedText;
 }
 
 // Event Listener for Encrypting, Keys and displaying in UI
@@ -264,12 +322,9 @@ document.querySelector(".encrypt-button")?.addEventListener("click", () => {
     const matrixWithKey = displayKeyMatrix(keyText);
     (document.getElementById("matrix-with-key") as HTMLTextAreaElement).value =
       formatMatrix(matrixWithKey);
+
     // Encrypt the text and display it
-    const encryptedText = encryptDecryptPlayfairCipher(
-      filteredText,
-      matrixWithKey,
-      true
-    );
+    const encryptedText = encryptPlayfairCipher(encryptText, matrixWithKey);
     (document.getElementById("encrypted-text") as HTMLTextAreaElement).value =
       encryptedText;
   } catch (error) {
@@ -291,23 +346,26 @@ document.querySelector(".decrypt-button")?.addEventListener("click", () => {
   const encryptedText = (
     document.getElementById("text-to-decrypt") as HTMLTextAreaElement
   ).value;
-  const matrixWithKey = displayKeyMatrix(keyText);
-  (document.getElementById("matrix-with-key") as HTMLTextAreaElement).value =
-    formatMatrix(matrixWithKey);
 
+  const originalInput = (
+    document.getElementById("text-to-encrypt") as HTMLTextAreaElement
+  ).value;
   try {
-    const decryptedText = encryptDecryptPlayfairCipher(
+    const matrixWithKey = displayKeyMatrix(keyText);
+
+    const decryptedText = decryptPlayfairCipher(
       encryptedText,
       matrixWithKey,
-      false
+      originalInput
     );
+
     (document.getElementById("decrypted-text") as HTMLTextAreaElement).value =
       decryptedText;
 
-    const filteredText = prepareText(decryptedText, false);
+    // Decrypt the text and display it
     (
       document.getElementById("decrypted-filtered-text") as HTMLTextAreaElement
-    ).value = filteredText;
+    ).value = decryptedText;
   } catch (error) {
     if (error instanceof Error) {
       alert(error.message);
