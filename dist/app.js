@@ -249,7 +249,7 @@ function decryptPlayfairCipher(text, keyMatrix, originalInput) {
             return keyMatrix[row1][col2] + keyMatrix[row2][col1];
         }
     })
-        .join(""); // Join the result into a single string
+        .join(""); // Into a single string
     // Replace placeholders back to original spaces and numbers
     decryptedText = decryptedText
         .replace(new RegExp(spacePlaceholder, "g"), " ")
