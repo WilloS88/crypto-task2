@@ -1,6 +1,6 @@
 const matrixSize = 5;
 const alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
-const playfairKeyEx = "PLAYFAIREXAMPLE";
+const playfairKeyEx = "PETRKLÍČEK";
 const spacePlaceholder = "XMEZERAY";
 const numbersPlaceholder = [
   "XZEROY",
@@ -327,6 +327,7 @@ document.querySelector(".encrypt-button")?.addEventListener("click", () => {
     const encryptedText = encryptPlayfairCipher(encryptText, matrixWithKey);
     (document.getElementById("encrypted-text") as HTMLTextAreaElement).value =
       encryptedText;
+
   } catch (error) {
     if (error instanceof Error) {
       alert(error.message);
@@ -381,6 +382,8 @@ document.querySelector(".playfair-button")?.addEventListener("click", () => {
     playfairKeyEx.toUpperCase();
 
   try {
+    (document.getElementById("text-to-encrypt") as HTMLTextAreaElement).value = "Útok na Čeňka v 19:00 &#*^$#@OK";
+
     const encodedText = displayKeyMatrix(playfairKeyEx);
     (document.getElementById("matrix-with-key") as HTMLTextAreaElement).value =
       formatMatrix(encodedText);

@@ -2,7 +2,7 @@
 var _a, _b, _c;
 const matrixSize = 5;
 const alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
-const playfairKeyEx = "PLAYFAIREXAMPLE";
+const playfairKeyEx = "PETRKLÍČEK";
 const spacePlaceholder = "XMEZERAY";
 const numbersPlaceholder = [
     "XZEROY",
@@ -320,6 +320,7 @@ function decryptPlayfairCipher(text, keyMatrix, originalInput) {
     document.getElementById("key-text").value =
         playfairKeyEx.toUpperCase();
     try {
+        document.getElementById("text-to-encrypt").value = "Útok na Čeňka v 19:00 &#*^$#@OK";
         const encodedText = displayKeyMatrix(playfairKeyEx);
         document.getElementById("matrix-with-key").value =
             formatMatrix(encodedText);
